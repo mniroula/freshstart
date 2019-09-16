@@ -1,0 +1,61 @@
+{
+  "name": "freshstart",
+  "version": "1.0.0",
+  "description": "FreshStart Portal",
+  "private": true,
+  "scripts": {
+    "dev:server": "nodemon src/server/server.js",
+    "dev:client": "webpack-dev-server --mode development --open",
+    "start": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev": "webpack --mode development --watch --open",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mniroula/freshstart.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mniroula/freshstart/issues"
+  },
+  "homepage": "https://github.com/mniroula/freshstart#readme",
+  "dependencies": {
+    "@material-ui/core": "^4.4.2",
+    "@material-ui/icons": "^4.4.1",
+    "axios": "^0.19.0",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "nodemailer": "^6.3.0",
+    "pg": "^7.12.1",
+    "react": "^16.9.0",
+    "react-cookies": "^0.1.1",
+    "react-dom": "^16.9.0",
+    "react-router-dom": "^5.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "concurrently": "^4.1.2",
+    "css-loader": "^3.2.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^4.2.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.12.0",
+    "nodemon": "^1.19.2",
+    "prop-types": "^15.7.2",
+    "resolve-url-loader": "^3.1.0",
+    "sass-loader": "^7.3.1",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "^3.8.0"
+  }
+}

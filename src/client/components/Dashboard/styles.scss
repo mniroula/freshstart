@@ -1,0 +1,77 @@
+@import 'client/styles/variables';
+
+.root {
+  display: flex;
+
+  .appBar {
+    z-index: 1201;
+    transition: width .25s cubic-bezier(0.6, 0, 0.6, 1);
+    transition: margin .25s cubic-bezier(0.6, 0, 0.6, 1);
+    background: $toolbar_background;
+    color: $main-font-color;
+
+    .username {
+      flex-grow: 1;
+      text-align: right;
+    }
+  }
+
+  .appBarShift {
+    margin-left: 240px;
+    width: calc(100% - 240px);
+    transition: width .25s cubic-bezier(0.6, 0, 0.6, 1);
+    transition: margin .25s cubic-bezier(0.6, 0, 0.6, 1);
+  }
+
+  .menuButton {
+    margin-right: 36px,
+  }
+
+  .hide {
+    display: none;
+  }
+
+  .drawer {
+    width: 240px;
+    flex-shrink: 0;
+    white-space: nowrap;
+
+    .logo {
+      width: 240px;
+      height: 64px;
+      background: url(images/logo.png) no-repeat center;
+      background-size: contain;
+    }
+  }
+
+  .drawerOpen {
+    width: 240px;
+    transition: width .25s cubic-bezier(0.6, 0, 0.6, 1);
+    background: $sidebar_background;
+  }
+
+  .drawerClose {
+    overflow-x: hidden;
+    width: 60px;
+    transition: width .25s cubic-bezier(0.6, 0, 0.6, 1);
+    background: $sidebar_background;
+  }
+
+  .content {
+    flex-grow: 1;
+    padding: 15px;
+  }
+
+  .menuItem {
+    text-decoration: none;
+    color: #000;
+  }
+
+  .active * {
+    background: #ccc;
+  }
+
+  .toolbar {
+    margin-top: 60px;
+  }
+}
