@@ -21,6 +21,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
 // Modules
 import DataPostDashboard from '../DataPostDashboard';
+// Hocs
+import withData from '../../hocs/withData';
 
 import styles from './styles.scss';
 
@@ -37,13 +39,13 @@ const Dashboard = ({ history }) => {
   useEffect(() => {
     const isAuthorized = cookie.load('authorized') || false;
     if (!isAuthorized) {
-      history.replace('/auth/login');
+      history.push('/auth/login');
     }
   }, []);
 
   const signOut = () => {
     cookie.remove('authorized', { path: '/' })
-    history.replace('/auth/login');
+    history.push('/auth/login');
   };
 
   console.log('Rendering Dashboard');
@@ -80,9 +82,10 @@ const Dashboard = ({ history }) => {
             </IconButton>
             <Menu
               id="menu-appbar"
+              getContentAnchorEl={null}
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: 'top',
+                vertical: 'bottom',
                 horizontal: 'right',
               }}
               keepMounted
@@ -90,12 +93,16 @@ const Dashboard = ({ history }) => {
                 vertical: 'top',
                 horizontal: 'right',
               }}
+              elevation={0}
               open={openAccountSettings}
               onClose={() => setAnchorEl(null)}
             >
-              <MenuItem onClick={() => setAnchorEl(null)}>Profile</MenuItem>
-              <MenuItem onClick={() => setAnchorEl(null)}>My account</MenuItem>
-              <MenuItem onClick={() => signOut()}>Sign Out</MenuItem>
+              <MenuItem onClick={() => signOut()}>
+                <ListItemIcon>
+                  <div className={styles.signoutIcon} />
+                </ListItemIcon>
+                <ListItemText primary="Sign Out" />
+              </MenuItem>
             </Menu>
           </div>
         </Toolbar>
@@ -107,7 +114,7 @@ const Dashboard = ({ history }) => {
         open={open}
       >
         <div className={styles.logo}></div>
-        <List>
+        <List className={styles.menuList}>
           { menuItems.map((item) => (
             <NavLink to={item.link} className={styles.menuItem} activeClassName={styles.active} key={item.label}>
               <ListItem>
@@ -130,7 +137,11 @@ const Dashboard = ({ history }) => {
 };
 
 Dashboard.propTypes = {
-  history: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({}),
 };
 
-export default withRouter(Dashboard);
+Dashboard.defaultProps = {
+  history: null,
+};
+
+export default withRouter(withData(Dashboard));

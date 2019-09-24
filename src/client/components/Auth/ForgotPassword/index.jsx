@@ -5,6 +5,11 @@ import axios from 'axios';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import Message from '../../_common/Message';
+
+import { apiUrl } from '../../../config';
+
 import styles from './styles.scss';
 
 const ForgotPassword = ({ history }) => {
@@ -12,6 +17,7 @@ const ForgotPassword = ({ history }) => {
   const [values, setValues] = useState({ email: '' });
   const [errors, setErrors] = useState({ email: !re.test(values.email) });
   const [resetErrorEmail, setResetErrorEmail] = useState(false);
+  const [resetEmailSent, setResetEmailSent] = useState(false);
 
   const handleChange = name => event => {
     const value = event.target.value;
@@ -22,18 +28,17 @@ const ForgotPassword = ({ history }) => {
   const resetPassword = () => {
     axios({
       method: 'post',
-      url: '/api/forgotPassword',
+      url: `${apiUrl}/api/forgotPassword`,
       data: {
         email: values.email
       }
     }).then(({data}) => {
       if (data.error) {
-        console.log(data);
         setErrors({ email: true });
         setValues({ email: '' });
         setResetErrorEmail(true);
       } else {
-        console.log(data);
+        setResetEmailSent(true);
       }
     });
   };
@@ -53,7 +58,7 @@ const ForgotPassword = ({ history }) => {
           margin='normal'
           required
           error ={errors.email}
-          helperText={resetErrorEmail ? 'Email doesn\'t exist' : null }
+          helperText={errors.email ? 'Invalid email address' : null }
         />
         <Button variant='contained' style={{
           backgroundColor: errors.email ? '#b8b8b8' : '#1abc9c',
@@ -67,6 +72,22 @@ const ForgotPassword = ({ history }) => {
         </Button>
         <Link className={styles.backToLogin} to="/auth/login">Back to Login Page</Link>
       </div>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        open={resetErrorEmail}
+        autoHideDuration={5000}
+        onClose={() => setResetErrorEmail(false)}
+      >
+        <Message message="Email doesn't exist" variant="error" onClose={() => setResetErrorEmail(false)} />
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        open={resetEmailSent}
+        autoHideDuration={5000}
+        onClose={() => setResetEmailSent(false)}
+      >
+        <Message message="Reset email sent" variant="success" onClose={() => setResetEmailSent(false)} />
+      </Snackbar>
     </div>
   );
 };

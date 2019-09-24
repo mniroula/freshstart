@@ -60,6 +60,11 @@
   .content {
     flex-grow: 1;
     padding: 15px;
+    height: 100%;
+  }
+
+  .menuList {
+    padding-top: 0 !important;
   }
 
   .menuItem {
@@ -72,6 +77,20 @@
   }
 
   .toolbar {
-    margin-top: 60px;
+    margin-top: 50px;
   }
+}
+
+.passwordIcon {
+  width: 20px;
+  height: 20px;
+  background-image: url(images/icons/password.png);
+  background-size: contain;
+}
+
+.signoutIcon {
+  width: 20px;
+  height: 20px;
+  background-image: url(images/icons/signout.png);
+  background-size: contain;
 }

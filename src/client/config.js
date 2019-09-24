@@ -1,0 +1,1 @@
+export const apiUrl = 'http://api.fsportal.site:5000';

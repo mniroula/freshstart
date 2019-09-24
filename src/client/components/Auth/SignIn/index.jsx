@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import axios from 'axios';
@@ -8,10 +9,15 @@ import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import Message from '../../_common/Message';
+
+import { setUser } from '../../../store/reducers/app/actions';
+import { apiUrl } from '../../../config';
 
 import styles from './styles.scss';
 
-const SignIn = ({ history }) => {
+const SignIn = ({ history, onLoginUser }) => {
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const [values, setValues] = useState({
     email: cookie.load('email') || '',
@@ -51,7 +57,7 @@ const SignIn = ({ history }) => {
     // Validate email/password
     axios({
       method: 'post',
-      url: '/api/signin',
+      url: `${apiUrl}/api/signin`,
       data: {
         email: values.email,
         password: values.password
@@ -71,10 +77,17 @@ const SignIn = ({ history }) => {
         // Authorize
         const expireSignIn = getExpireDate(60 * 12);
         cookie.save("authorized", true, {path: "/", expires: expireSignIn});
+        cookie.save("username", data.data.username, {path: "/", expires: expireAuth});
+        // Redux
+        onLoginUser(values.email);
         // Redirect to dashboard
         history.push('/');
       }
     });
+  };
+
+  const handleCloseMessage = () => {
+    setLoginError(false);
   };
 
   return (
@@ -91,7 +104,7 @@ const SignIn = ({ history }) => {
           margin='normal'
           required
           error ={errors.email}
-          helperText={loginError ? 'Wrong email/password' : null}
+          helperText={errors.email ? 'Invalid email address' : null}
         />
         <TextField
           name='password'
@@ -103,7 +116,7 @@ const SignIn = ({ history }) => {
           margin='normal'
           required
           error ={errors.password}
-          helperText='Minimum password field length is 6 chars'
+          helperText={errors.password ? 'Minimum password field length is 6 chars' : null}
         />
         <div className={styles.row}>
           <FormControlLabel
@@ -131,12 +144,31 @@ const SignIn = ({ history }) => {
         </Button>
         <Link className={styles.signUp} to="/auth/register">Sign Up</Link>
       </div>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        open={loginError}
+        autoHideDuration={5000}
+        onClose={handleCloseMessage}
+      >
+        <Message message="Wrong email/password" variant="error" onClose={handleCloseMessage} />
+      </Snackbar>
     </div>
   );
 };
 
 SignIn.propTypes = {
   history: PropTypes.shape({}).isRequired,
+  onLoginUser: PropTypes.func.isRequired,
 };
 
-export default withRouter(SignIn);
+const mapDispatchToProps = dispatch => {
+  return {
+    onLoginUser: name => {
+      dispatch(setUser(name));
+    }
+  };
+};
+
+export default withRouter(
+  connect(null, mapDispatchToProps)(SignIn)
+);

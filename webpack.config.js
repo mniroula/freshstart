@@ -17,7 +17,7 @@ module.exports = {
     port: 3000,
     proxy: {
       '/api': {
-        target:'http://localhost:8080',
+        target:'http://api.fsportal.site:5000',
         secure:false,
         changeOrigin:true
       }
@@ -41,7 +41,15 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              modules: true
+              modules: true,
+              getLocalIdent: (context, localIdentName, localName) => {
+                const hash = context.context
+                  .split('')
+                  .map(v => v.charCodeAt(0))
+                  .reduce((a, v) => (a + ((a << 7) + (a << 3))) ^ v)
+                  .toString(16);
+                return `${localName}__${hash}`;
+              },
             },
           },
           {

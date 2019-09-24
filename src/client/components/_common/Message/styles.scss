@@ -1,0 +1,29 @@
+.success {
+  background: #43a047 !important;
+}
+
+.warning {
+  background: #ffa000 !important;
+}
+
+.error {
+  background: #d32f2f !important;
+}
+
+.info {
+  background: #1976d2 !important;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.iconVariant {
+  opacity: 0.9;
+  margin-right: 20px;
+}
+
+.message {
+  display: flex;
+  align-items: center;
+}

@@ -4,24 +4,31 @@ import axios from 'axios';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import Message from '../../_common/Message';
+
+import { apiUrl } from '../../../config';
 
 import styles from './styles.scss';
 
 const ResetPassword = ({ match }) => {
   const [values, setValues] = useState({
     isTokenValidated: false,
-    isValidToken: true,
+    isValidToken: false,
     userId: null,
     password: '',
     repeatPassword: '',
     passwordsMatch: false
   });
+  const [errorMessage, setErrorMessage] = useState(false);
+  const [errorPasswordUpdate, setErrorPasswordUpdate] = useState(false);
+  const [passwordUpdated, setPasswordUpdated] = useState(false);
 
   // Validate token
   useEffect(() => {
     axios({
       method: 'post',
-      url: '/api/validateToken',
+      url: `${apiUrl}/api/validateToken`,
       data: {
         token: match.params.token
       }
@@ -32,6 +39,7 @@ const ResetPassword = ({ match }) => {
           isTokenValidated: true,
           isValidToken: false
         }));
+        setErrorMessage(true);
       } else {
         console.log(data);
         setValues(v => ({
@@ -57,16 +65,16 @@ const ResetPassword = ({ match }) => {
   const updatePassword = () => {
     axios({
       method: 'post',
-      url: '/api/updatePassword',
+      url: `${apiUrl}/api/updatePassword`,
       data: {
-        email: values.email,
+        id: values.userId,
         password: values.password
       }
     }).then(({data}) => {
       if (data.error) {
-        console.log(data);
+        setErrorPasswordUpdate(true);
       } else {
-        console.log(data);
+        setPasswordUpdated(true);
       }
     });
   };
@@ -111,11 +119,35 @@ const ResetPassword = ({ match }) => {
           paddingRight: '50px',
           marginTop: '20px' }}
           onClick={() => updatePassword()}
-          disabled={!values.passwordsMatch}>
+          disabled={!values.passwordsMatch || (values.isTokenValidated && !values.isValidToken)}>
           Update Password
         </Button>
         <Link className={styles.backToLogin} to="/auth/login">Back to Login Page</Link>
       </div>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        open={errorMessage}
+        autoHideDuration={5000}
+        onClose={() => setErrorMessage(false)}
+      >
+        <Message message="Token is invalid or has been expired" variant="error" onClose={() => setErrorMessage(false)} />
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        open={errorPasswordUpdate}
+        autoHideDuration={5000}
+        onClose={() => setErrorPasswordUpdate(false)}
+      >
+        <Message message="Password update error" variant="error" onClose={() => setErrorPasswordUpdate(false)} />
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        open={passwordUpdated}
+        autoHideDuration={5000}
+        onClose={() => setPasswordUpdated(false)}
+      >
+        <Message message="Password updated" variant="success" onClose={() => setPasswordUpdated(false)} />
+      </Snackbar>
     </div>
   );
 };
