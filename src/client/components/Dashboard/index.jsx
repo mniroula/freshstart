@@ -33,11 +33,13 @@ const menuItems = [
 
 const Dashboard = ({ history }) => {
   const [open, setOpen] = useState(false);
+  const [userName, setUserName] = useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openAccountSettings = Boolean(anchorEl);
 
   useEffect(() => {
     const isAuthorized = cookie.load('authorized') || false;
+    setUserName(cookie.load('username') || null);
     if (!isAuthorized) {
       history.push('/auth/login');
     }
@@ -67,9 +69,7 @@ const Dashboard = ({ history }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="body1" noWrap className={styles.username}>
-            Vital Medvedev
-          </Typography>
+          <Typography variant="body1" noWrap className={styles.username}>{ userName }</Typography>
           <div>
             <IconButton
               aria-label="account of current user"

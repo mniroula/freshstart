@@ -17,15 +17,15 @@ const SignUp = ({ history }) => {
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const [formData, setFormData] = useState({ username: '', email: '', password: '' });
   const [errors, setErrors] = useState({
-    username: !values.username.length,
-    email: !re.test(values.email),
-    password: values.password.length < 6
+    username: !formData.username.length,
+    email: !re.test(formData.email),
+    password: formData.password.length < 6
   });
   const [emailExists, setEmailExists] = useState(false);
 
   const handleChange = name => event => {
     const value = event.target.value;
-    setValues({ ...values, [name]: value }); 
+    setFormData({ ...formData, [name]: value }); 
     if (name === 'username') {
       setErrors(err => ({
         ...err,

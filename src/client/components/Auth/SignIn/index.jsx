@@ -77,7 +77,7 @@ const SignIn = ({ history, onLoginUser }) => {
         // Authorize
         const expireSignIn = getExpireDate(60 * 12);
         cookie.save("authorized", true, {path: "/", expires: expireSignIn});
-        cookie.save("username", data.data.username, {path: "/", expires: expireAuth});
+        cookie.save("username", data.data.username, {path: "/", expires: expireSignIn});
         // Redux
         onLoginUser(values.email);
         // Redirect to dashboard

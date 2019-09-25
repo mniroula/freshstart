@@ -54,11 +54,11 @@ const DataPostDashboard = ({ sessions, updateClients }) => {
       } else {
         console.log('Success', data);
         setPostSuccess(true);
-        // const clients = sessionClients.map(sClient => ({
-        //   ...sClient,
-        //   exists: true,
-        // }));
-        // setSessionClients(clients)
+        const clients = sessionClients.map(sClient => ({
+          ...sClient,
+          exists: true,
+        }));
+        setSessionClients(clients)
       }
     });
   };

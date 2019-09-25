@@ -32,7 +32,7 @@ const loginUser = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { email, password } = req.body;
+  const { username, email, password } = req.body;
 
   pool.query('SELECT * FROM app_users WHERE email = $1', [email], (error, results) => {
     if (error) {
@@ -42,11 +42,11 @@ const createUser = (req, res) => {
     if (results.rows.length === 0) {
       // New user
       const hash = bcrypt.hashSync(password, saltRounds);
-      pool.query('INSERT INTO app_users (email, password) VALUES ($1, $2) RETURNING id', [email, hash], (error, results) => {
+      pool.query('INSERT INTO app_users (username, email, password) VALUES ($1, $2, $3)', [username, email, hash], (error, results) => {
         if (error) {
           res.json({ error: true, msg: error });
         }
-        res.json({ error: false, userId: results.rows[0].id });
+        res.json({ error: false });
       });
     } else {
       // Existing user
